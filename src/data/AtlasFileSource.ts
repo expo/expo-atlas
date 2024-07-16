@@ -11,18 +11,31 @@ import { appendJsonLine, forEachJsonLines, parseJsonLine } from '../utils/jsonl'
 export type AtlasMetadata = { name: string; version: string };
 
 export class AtlasFileSource implements AtlasSource {
+  protected cacheList: Set<PartialAtlasBundle> | null = null;
+  protected cacheBundle: Map<string, AtlasBundle> = new Map();
+
   constructor(public readonly filePath: string) {
     //
   }
 
-  listBundles() {
-    return listAtlasEntries(this.filePath);
+  async listBundles() {
+    if (!this.cacheList?.size) {
+      const bundles = await listAtlasEntries(this.filePath);
+      this.cacheList = new Set(bundles);
+    }
+
+    return Array.from(this.cacheList.values());
   }
 
-  getBundle(id: string) {
+  async getBundle(id: string) {
     const numeric = parseInt(id, 10);
     assert(!Number.isNaN(numeric) && numeric > 1, `Invalid entry ID: ${id}`);
-    return readAtlasEntry(this.filePath, Number(id));
+
+    if (!this.cacheBundle.has(id)) {
+      this.cacheBundle.set(id, await readAtlasEntry(this.filePath, numeric));
+    }
+
+    return this.cacheBundle.get(id)!;
   }
 
   hasHmrSupport() {
