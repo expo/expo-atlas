@@ -4,7 +4,7 @@ Inspect your Metro bundle, on module level.
 
 ## 🚀 How to use it
 
-Atlas is built into Expo starting from SDK 51, and enabled when defining the environment variable `EXPO_UNSTABLE_ATLAS=true`.
+Atlas is built into Expo and enabled when defining the environment variable `EXPO_ATLAS=true`.
 
 You can use Atlas with two Expo commands:
 - `$ expo start` → Start a local dev server, Atlas will listen to any change within your project.
@@ -15,7 +15,7 @@ You can use Atlas with two Expo commands:
 When enabling Atlas with the local dev server, you can access Atlas on [http://localhost:8081/_expo/atlas](http://localhost:8081/_expo/atlas). This shows you all information from the bundle loaded during development.
 
 ```bash
-$ EXPO_UNSTABLE_ATLAS=true npx expo start
+$ EXPO_ATLAS=true npx expo start
 ```
 
 > [!TIP]
@@ -27,7 +27,7 @@ When enabling Atlas during exports, Expo generates the `.expo/atlas.json` file i
 
 ```bash
 # Export the app for all platforms
-$ EXPO_UNSTABLE_ATLAS=true npx expo export --platform all
+$ EXPO_ATLAS=true npx expo export --platform all
 
 # Open Atlas using the default `.expo/atlas.jsonl` path
 $ npx expo-atlas
